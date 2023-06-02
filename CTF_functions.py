@@ -95,7 +95,7 @@ def create_CTF_data(defocus, voltage, cs, Cc, additional_phase_shift,  amplitude
 def make_2D_array(data):
     # Replace this section with your own data generation or data loading code
     num_samples = len(data)  # Number of samples
-    your_data = data  # Generate or load your own data here
+    
     
     # Convert the one-dimensional array to a 2D radiating array
     radius = np.linspace(0, 1, num_samples)  # Radial coordinates from 0 to 1
@@ -108,7 +108,7 @@ def make_2D_array(data):
         np.clip(np.floor((y + 0.5) * num_samples).astype(int), 0, num_samples - 1)
     )
     radiating_array = np.zeros((num_samples, num_samples))
-    radiating_array[indices] = your_data
+    radiating_array[indices] = data
     
     # Display the radiating array
     return radiating_array
