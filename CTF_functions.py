@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import math
+import cv2
 
 def get_wavelength(voltage):
     '''
@@ -113,3 +115,20 @@ def make_2D_array(data):
 
 #df = create_CTF_data(defocus=500, voltage=100, cs=cs, Cc=Cc, additional_phase_shift=additional_phase_shift,amplitude_contrast = amplitude_contrast, angle_of_source=angle_of_source)
 #df.head()
+
+def apply_ctf_to_image(data2D, image):
+    image = cv2.resize(image, data2D.shape)
+    fft = np.fft.fft2(image)
+    fshift = np.fft.fftshift(fft) 
+    magnitude_spectrum = np.log(np.abs(fshift))
+    
+    #plt.imshow(magnitude_spectrum)
+    fcomplex = fshift*1j
+    fshift_filtered = data2D*fcomplex
+    f_filtered_shifted = np.fft.fftshift(fshift_filtered) 
+    inv_image = np.fft.ifft2(fshift_filtered) 
+    
+    filtered_image = np.abs(inv_image) 
+    filtered_image -= filtered_image.min()
+    
+    return filtered_image
